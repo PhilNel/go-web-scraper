@@ -13,7 +13,7 @@ type JobSink interface {
 }
 
 type JobProvider interface {
-	Get(path string) (string, error)
+	Get() (string, error)
 }
 
 type JobHandler struct {
@@ -31,7 +31,7 @@ func NewJobHandler(p JobProvider, pr JobParser, s JobSink) *JobHandler {
 }
 
 func (h *JobHandler) Handle() error {
-	html, err := h.Provider.Get("../node-web-fetcher/rendered.html")
+	html, err := h.Provider.Get()
 	if err != nil {
 		return err
 	}
