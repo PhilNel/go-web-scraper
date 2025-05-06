@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"go-web-scraper/internal/model"
 )
 
@@ -13,7 +14,7 @@ type JobSink interface {
 }
 
 type JobProvider interface {
-	Get() (string, error)
+	Get(ctx context.Context) (string, error)
 }
 
 type JobHandler struct {
@@ -30,8 +31,8 @@ func NewJobHandler(p JobProvider, pr JobParser, s JobSink) *JobHandler {
 	}
 }
 
-func (h *JobHandler) Handle() error {
-	html, err := h.Provider.Get()
+func (h *JobHandler) Handle(ctx context.Context) error {
+	html, err := h.Provider.Get(ctx)
 	if err != nil {
 		return err
 	}
