@@ -14,7 +14,7 @@ type Config struct {
 }
 
 type File struct {
-	HtmlPath string `long:"file_path" description:"Path to HTML file to parse" env:"SCRAPER_HTML_PATH" default:"../node-web-fetcher/rendered.html"`
+	HTMLPath string `long:"file_path" description:"Path to HTML file to parse" env:"SCRAPER_HTML_PATH" default:"../node-web-fetcher/rendered.html"`
 }
 
 type Log struct {
