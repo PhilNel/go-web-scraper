@@ -23,7 +23,7 @@ func (p *DuckDuckGoParser) Parse(html string) []model.Job {
 	var jobs []model.Job
 	var currentDept string
 
-	doc.Find("h2, article").Each(func(i int, s *goquery.Selection) {
+	doc.Find("h2, article").Each(func(_ int, s *goquery.Selection) {
 		if isDepartmentHeader(s) {
 			currentDept = strings.TrimSpace(s.Text())
 			return

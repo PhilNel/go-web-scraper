@@ -11,7 +11,7 @@ type FileProvider struct {
 }
 
 func NewFileProvider(config *config.File) *FileProvider {
-	return &FileProvider{path: config.HtmlPath}
+	return &FileProvider{path: config.HTMLPath}
 }
 
 func (p *FileProvider) Get(_ context.Context) (string, error) {
