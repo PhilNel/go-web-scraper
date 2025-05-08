@@ -34,6 +34,7 @@ func (p *DuckDuckGoParser) Parse(html string) []model.Job {
 			jobs = append(jobs, model.Job{
 				Title:      title,
 				Department: currentDept,
+				Company:    "DuckDuckGo",
 			})
 		}
 	})

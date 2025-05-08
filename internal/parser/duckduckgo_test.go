@@ -23,7 +23,7 @@ const testHTML = `
 </article>
 `
 
-func TestDuckDuckGoParser_ParseJobs(t *testing.T) {
+func TestDuckDuckGoParser_ParseJobs_ValidJobs_ParsesCorrectly(t *testing.T) {
 	expected := []model.Job{
 		{
 			Title:      "Senior Android Engineer",

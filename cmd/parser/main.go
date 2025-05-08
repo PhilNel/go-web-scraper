@@ -23,15 +23,20 @@ func main() {
 	config := config.Load()
 	logging.Configure(config.Log)
 
-	prov, err := provider.BuildProvider(config)
+	provider, err := provider.BuildProvider(config)
 	if err != nil {
 		log.WithError(err).Error("Failed to build provider")
 		os.Exit(1)
 	}
-	pars := parser.NewDuckDuckGoParser()
-	snk := sink.NewConsoleSink()
+	sink, err := sink.BuildSink(config)
+	if err != nil {
+		log.WithError(err).Error("Failed to build sink")
+		os.Exit(1)
+	}
 
-	h := handler.NewJobHandler(prov, pars, snk)
+	parser := parser.NewDuckDuckGoParser()
+
+	h := handler.NewJobHandler(provider, parser, sink)
 
 	ctx := context.Background()
 	if err := h.Handle(ctx); err != nil {
