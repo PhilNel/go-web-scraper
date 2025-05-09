@@ -16,8 +16,9 @@ func NewConsoleSink() *ConsoleSink {
 	}
 }
 
-func (s *ConsoleSink) Write(jobs []model.Job) {
+func (s *ConsoleSink) Write(jobs []model.Job) error {
 	for _, job := range jobs {
 		s.log.Info(fmt.Sprintf("📌 %s — %s", job.Title, job.Department))
 	}
+	return nil
 }

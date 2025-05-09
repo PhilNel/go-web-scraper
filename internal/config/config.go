@@ -11,8 +11,13 @@ type Config struct {
 	File     *File
 	Log      *Log
 	Provider *Provider
+	Runtime  *Runtime
 	S3       *S3
 	Sink     *Sink
+}
+
+type Runtime struct {
+	LambdaRuntimeAPI string `long:"lambda_runtime_api" description:"Set automatically by AWS Lambda" env:"AWS_LAMBDA_RUNTIME_API" default:""`
 }
 
 type File struct {

@@ -12,14 +12,14 @@ import (
 	"go-web-scraper/internal/parser"
 	"go-web-scraper/internal/provider"
 	"go-web-scraper/internal/sink"
+
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 func main() {
 	log := logging.GetLogger("main")
-	err := godotenv.Load()
-	if err != nil {
-		log.Info("No .env file found or error loading .env file")
-	}
+
+	_ = godotenv.Load()
 	config := config.Load()
 	logging.Configure(config.Log)
 
@@ -38,9 +38,14 @@ func main() {
 
 	h := handler.NewJobHandler(provider, parser, sink)
 
-	ctx := context.Background()
-	if err := h.Handle(ctx); err != nil {
-		log.WithError(err).Error("Handler failed")
-		os.Exit(1)
+	if config.Runtime.LambdaRuntimeAPI != "" {
+		log.Info("Running in Lambda mode")
+		lambda.Start(h.Handle)
+	} else {
+		log.Info("Running in local mode")
+		if err := h.Handle(context.Background(), nil); err != nil {
+			log.WithError(err).Error("Handler failed")
+			os.Exit(1)
+		}
 	}
 }
