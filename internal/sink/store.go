@@ -21,11 +21,13 @@ func NewStoreSink(store JobStore) *StoreSink {
 	}
 }
 
-func (s *StoreSink) Write(jobs []model.Job) {
+func (s *StoreSink) Write(jobs []model.Job) error {
 	for _, job := range jobs {
 		err := s.store.Store(job)
 		if err != nil {
 			s.log.WithError(err).Error("Error writing job to store")
+			return err
 		}
 	}
+	return nil
 }
