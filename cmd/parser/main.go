@@ -28,6 +28,7 @@ func main() {
 		log.WithError(err).Error("Failed to build provider")
 		os.Exit(1)
 	}
+
 	sink, err := sink.BuildSink(config)
 	if err != nil {
 		log.WithError(err).Error("Failed to build sink")

@@ -10,7 +10,7 @@ type JobParser interface {
 }
 
 type JobSink interface {
-	Write(jobs []model.Job) error
+	Write(ctx context.Context, jobs []model.Job) error
 }
 
 type JobProvider interface {
@@ -38,7 +38,7 @@ func (h *JobHandler) Handle(ctx context.Context, _ interface{}) error {
 	}
 
 	jobs := h.Parser.Parse(html)
-	err = h.Sink.Write(jobs)
+	err = h.Sink.Write(ctx, jobs)
 	if err != nil {
 		return err
 	}

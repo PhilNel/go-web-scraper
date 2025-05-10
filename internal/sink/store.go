@@ -1,12 +1,13 @@
 package sink
 
 import (
+	"context"
 	"go-web-scraper/internal/logging"
 	"go-web-scraper/internal/model"
 )
 
 type JobStore interface {
-	Store(job model.Job) error
+	Store(ctx context.Context, job model.Job) error
 }
 
 type StoreSink struct {
@@ -21,9 +22,9 @@ func NewStoreSink(store JobStore) *StoreSink {
 	}
 }
 
-func (s *StoreSink) Write(jobs []model.Job) error {
+func (s *StoreSink) Write(ctx context.Context, jobs []model.Job) error {
 	for _, job := range jobs {
-		err := s.store.Store(job)
+		err := s.store.Store(ctx, job)
 		if err != nil {
 			s.log.WithError(err).Error("Error writing job to store")
 			return err
