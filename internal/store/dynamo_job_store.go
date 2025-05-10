@@ -8,6 +8,7 @@ import (
 	"go-web-scraper/internal/logging"
 	"go-web-scraper/internal/model"
 	"go-web-scraper/internal/util"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awscfg "github.com/aws/aws-sdk-go-v2/config"
@@ -16,10 +17,11 @@ import (
 )
 
 type JobDynamoRecord struct {
-	ID         string `dynamodbav:"job_id"`
-	Title      string `dynamodbav:"title"`
-	Department string `dynamodbav:"department"`
-	Company    string `dynamodbav:"company"`
+	ID          string `dynamodbav:"job_id"`
+	Title       string `dynamodbav:"title"`
+	Department  string `dynamodbav:"department"`
+	Company     string `dynamodbav:"company"`
+	LastUpdated string `dynamodbav:"lastUpdated"`
 }
 
 type DynamoJobStore struct {
@@ -45,13 +47,14 @@ func NewDynamoJobStore(config *config.Dynamo) (*DynamoJobStore, error) {
 	}, nil
 }
 
-func (s *DynamoJobStore) Store(job model.Job) error {
+func (s *DynamoJobStore) Store(ctx context.Context, job model.Job) error {
 	id := util.GenerateJobID(job)
 	record := JobDynamoRecord{
-		ID:         id,
-		Title:      job.Title,
-		Department: job.Department,
-		Company:    job.Company,
+		ID:          id,
+		Title:       job.Title,
+		Department:  job.Department,
+		Company:     job.Company,
+		LastUpdated: time.Now().UTC().Format(time.RFC3339),
 	}
 
 	item, err := attributevalue.MarshalMap(record)
@@ -59,7 +62,7 @@ func (s *DynamoJobStore) Store(job model.Job) error {
 		return fmt.Errorf("failed to marshal job: %w", err)
 	}
 
-	_, err = s.client.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	_, err = s.client.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(s.tableName),
 		Item:      item,
 	})
