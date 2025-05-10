@@ -23,7 +23,7 @@ Make sure the `node-web-fetcher project` is available and has run to produce ren
 Run the full flow:
 
 ```make
-make run
+make parse
 ```
 
 ## 🔧 Dependencies

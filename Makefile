@@ -7,8 +7,8 @@ LAMBDA_NAME := go-parser-lambda
 ZIP_FILE := $(LAMBDA_NAME).zip
 BINARY_NAME := bootstrap
 
-.PHONY: run
-run:
+.PHONY: parse
+parse:
 	go run $(CMD_DIR)/main.go
 
 .PHONY: build

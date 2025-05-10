@@ -10,11 +10,11 @@ import (
 
 func Test_GenerateJobID_OutputsExpected(t *testing.T) {
 	job := model.Job{
-		Title:      "Software Engineer",
-		Department: "Engineering",
+		Title:      "Senior Backend Engineer",
+		Department: "Engineering - Backend Engineering",
 		Company:    "DuckDuckGo",
 	}
-	expected := "8a118a0579d79aafd2e59d1928adb5abeb55a8af899cb9aebdd8e3eecc569b4e"
+	expected := "f44efb505a4969fb0dcc565f95fbfd05ad822127c56ca3a63a31b441eb2c376a"
 
 	actual := GenerateJobID(job)
 
