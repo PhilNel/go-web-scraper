@@ -2,20 +2,17 @@ package provider
 
 import (
 	"context"
-	"go-web-scraper/internal/config"
 	"os"
 )
 
-type FileProvider struct {
-	path string
+type FileProvider struct{}
+
+func NewFileProvider() *FileProvider {
+	return &FileProvider{}
 }
 
-func NewFileProvider(config *config.File) *FileProvider {
-	return &FileProvider{path: config.HTMLPath}
-}
-
-func (p *FileProvider) Get(_ context.Context) (string, error) {
-	data, err := os.ReadFile(p.path)
+func (p *FileProvider) Get(_ context.Context, path string) (string, error) {
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}

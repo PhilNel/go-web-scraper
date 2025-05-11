@@ -36,15 +36,15 @@ func NewS3Provider(config *config.S3) (*S3Provider, error) {
 	}, nil
 }
 
-func (s *S3Provider) Get(ctx context.Context) (string, error) {
+func (s *S3Provider) Get(ctx context.Context, path string) (string, error) {
 	s.log.WithFields(map[string]interface{}{
 		"bucket": s.config.Bucket,
-		"key":    s.config.Key,
+		"key":    path,
 	}).Info("Fetching file from S3")
 
 	resp, err := s.client.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: aws.String(s.config.Bucket),
-		Key:    aws.String(s.config.Key),
+		Key:    aws.String(path),
 	})
 	if err != nil {
 		s.log.WithError(err).Error("Failed to fetch object")
