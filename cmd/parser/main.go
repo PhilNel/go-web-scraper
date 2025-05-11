@@ -9,7 +9,7 @@ import (
 	"go-web-scraper/internal/config"
 	"go-web-scraper/internal/handler"
 	"go-web-scraper/internal/logging"
-	"go-web-scraper/internal/parser"
+	"go-web-scraper/internal/model"
 	"go-web-scraper/internal/provider"
 	"go-web-scraper/internal/sink"
 
@@ -35,16 +35,23 @@ func main() {
 		os.Exit(1)
 	}
 
-	parser := parser.NewDuckDuckGoParser()
-
-	h := handler.NewJobHandler(provider, parser, sink)
+	h := handler.NewJobHandler(provider, sink)
 
 	if config.Runtime.LambdaRuntimeAPI != "" {
 		log.Info("Running in Lambda mode")
 		lambda.Start(h.Handle)
 	} else {
 		log.Info("Running in local mode")
-		if err := h.Handle(context.Background(), nil); err != nil {
+		mockEvent := model.EventBridgeEvent{
+			Detail: model.EventBridgeDetail{
+				Object: struct {
+					Key string `json:"key"`
+				}{
+					Key: "duckduckgo/rendered.html",
+				},
+			},
+		}
+		if err := h.Handle(context.Background(), mockEvent); err != nil {
 			log.WithError(err).Error("Handler failed")
 			os.Exit(1)
 		}

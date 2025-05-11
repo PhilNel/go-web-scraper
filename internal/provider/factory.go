@@ -9,7 +9,7 @@ import (
 func BuildProvider(cfg *config.Config) (handler.JobProvider, error) {
 	switch cfg.Provider.Type {
 	case "file":
-		return NewFileProvider(cfg.File), nil
+		return NewFileProvider(), nil
 	case "s3":
 		return NewS3Provider(cfg.S3)
 	default:
