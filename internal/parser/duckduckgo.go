@@ -14,10 +14,10 @@ func NewDuckDuckGoParser() *DuckDuckGoParser {
 	return &DuckDuckGoParser{}
 }
 
-func (p *DuckDuckGoParser) Parse(html string) []model.Job {
+func (p *DuckDuckGoParser) Parse(html string) ([]model.Job, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	var jobs []model.Job
@@ -39,7 +39,7 @@ func (p *DuckDuckGoParser) Parse(html string) []model.Job {
 		}
 	})
 
-	return jobs
+	return jobs, nil
 }
 
 func isDepartmentHeader(s *goquery.Selection) bool {

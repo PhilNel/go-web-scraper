@@ -47,7 +47,7 @@ func main() {
 				Object: struct {
 					Key string `json:"key"`
 				}{
-					Key: "duckduckgo/rendered.html",
+					Key: "posthog/rendered.html",
 				},
 			},
 		}
