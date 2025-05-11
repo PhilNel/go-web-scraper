@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testHTML = `
+const duckDuckGoTestHTML = `
 <h2 class="openPositions_department__WDYK7">Engineering - Android</h2>
 <article typeof="JobPosting">
   <header>
@@ -36,8 +36,9 @@ func TestDuckDuckGoParser_ParseJobs_ValidJobs_ParsesCorrectly(t *testing.T) {
 	}
 	parser := NewDuckDuckGoParser()
 
-	jobs := parser.Parse(testHTML)
+	jobs, err := parser.Parse(duckDuckGoTestHTML)
 
+	assert.NoError(t, err)
 	assert.Equal(t, 2, len(jobs), "should parse exactly two jobs")
 	for i, job := range jobs {
 		assert.Equal(t, expected[i].Title, job.Title, "title mismatch at index %d", i)

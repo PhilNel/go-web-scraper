@@ -39,19 +39,26 @@ func (h *JobHandler) Handle(ctx context.Context, event model.EventBridgeEvent) e
 
 	html, err := h.Provider.Get(ctx, eventKey)
 	if err != nil {
+		h.log.WithError(err).Error("Error fetching HTML")
 		return err
 	}
 
 	company, err := util.ParseCompanyNameFromKey(eventKey)
 	if err != nil {
+		h.log.WithError(err).Error("Error parsing company name")
 		return fmt.Errorf("failed to parse company from key: %w", err)
 	}
 
 	parser, err := parser.GetParserForCompany(company)
 	if err != nil {
+		h.log.WithError(err).Error("Error parsing HTML")
 		return fmt.Errorf("parser lookup failed: %w", err)
 	}
-	jobs := parser.Parse(html)
+
+	jobs, err := parser.Parse(html)
+	if err != nil {
+		return err
+	}
 
 	err = h.Sink.Write(ctx, jobs)
 	if err != nil {
