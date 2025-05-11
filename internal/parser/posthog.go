@@ -26,7 +26,7 @@ func (p *PostHogParser) Parse(html string) ([]model.Job, error) {
 		title := strings.TrimSpace(s.Find("span").Eq(0).Text())
 		dept := strings.TrimSpace(s.Find("span").Eq(1).Text())
 
-		if title != "" && dept != "" {
+		if title != "" || dept != "" {
 			jobs = append(jobs, model.Job{
 				Title:      title,
 				Department: dept,
